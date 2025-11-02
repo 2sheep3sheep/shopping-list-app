@@ -11,3 +11,60 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.App-Body {
+  padding: 24px;
+}
+
+.Shopping-List-Header {
+
+}
+
+.Big-Label {
+    font-size: 24px;
+    text-align: left;
+}
+
+.List-Item {
+  padding:12px;
+}
+.List-Item-Name {
+    font-size: 20px;
+}
+
+
+@media (max-width: 560px) {
+    .verbose-label {
+      display:none
+    }
+    .compact-label {
+      display:block
+    }
+    .shrink-response {
+      width: 40cqmin
+    }      
+    .Big-Label {
+      font-size: 18px;
+    }
+    .Member-List {
+      width:100%;
+    }
+
+}
+@media (min-width: 560px) {
+    .verbose-label {
+      display:block
+    }
+    .compact-label {
+      display:none
+    }      
+    .shrink-response {
+      width: 40cqmin
+    }     
+    .Big-Label {
+      font-size: 24px;
+    }
+    .Member-List {
+      width:100%;
+    }
+}
