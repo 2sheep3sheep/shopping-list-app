@@ -10,7 +10,7 @@ function ListItemList(props) {
 
     for (var i=0; i<item_ids.length; i++) {
         var key = item_ids[i]
-        list_items.push( <ListItem itemID={key} itemData={props.itemList[key]} setEditItemState={props.setEditItemState}/> )
+        list_items.push( <ListItem itemID={key} itemData={props.itemList[key]} setEditItemState={props.setEditItemState} filterOption={props.filterOption}/> )
     }
 
     return (

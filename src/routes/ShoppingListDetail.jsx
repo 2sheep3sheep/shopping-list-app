@@ -11,6 +11,9 @@ import InviteMemberModal from '../components/modals/InviteMemberModal.jsx';
 import ShoppingListModals from '../components/ShoppingListModals.jsx';
 import EditItemModal from '../components/modals/EditItemModal.jsx';
 import EditShoppingListModal from '../components/modals/EditShoppingListModal.jsx';
+import ButtonGroup from 'react-bootstrap/esm/ButtonGroup.js';
+import ToggleButton from 'react-bootstrap/esm/ToggleButton.js';
+import FilteringTab from '../components/FilteringTab.jsx';
 
 
 
@@ -27,10 +30,12 @@ function ShoppingListDetail() {
     const closeEditItemModal = () => setEditItemState({...editItemState,open:false}) ;
 
     const [ editListState, setEditListState ] = useState({open:false, listData:{name:undefined}});
-    const openEditListModal = () => setEditListState({open:true, listData:{name:shoppingListData.name}}) ;
+    const openEditListModal = () => setEditListState({open:true, listData:{name:shoppingListData}}) ;
     const closeEditListModal = () => setEditListState({...editListState, open:false}) ;
 
     // -------------------------------
+
+    const [ filterOption, setFilterOption ] = useState("2");
 
     const { shoppingListData } = useContext(ShoppingListDataContext);
     const { userData } = useContext(UserContext);
@@ -67,8 +72,9 @@ function ShoppingListDetail() {
             </div>
 
             <div className='Shopping-List-Body'>
+                <FilteringTab filterOption={filterOption} setFilterOption={setFilterOption}/>
 
-                <ListItemList itemList={shoppingListData.items} setEditItemState={setEditItemState}/>
+                <ListItemList itemList={shoppingListData.items} setEditItemState={setEditItemState} filterOption={filterOption}/>
                 
                 <div style={{width:"100%", justifyContent:"center", display:"flex"}}>
                     <Button style={{boxShadow:"0 4px 12px 0px rgb(0 0 0 / 20%)"}} onClick={openEditItemModal}>+ Add Item</Button>

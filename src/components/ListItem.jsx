@@ -41,6 +41,9 @@ function ListItem(props) {
         )
     }
 
+    if (props.filterOption === "2" && data.complete) return (<div/>)
+    if (props.filterOption === "3" && !data.complete) return (<div/>)
+
     return (
             <Card className='List-Item' style={{marginBottom:"12px", height:"115px", justifyContent:"space-evenly"}}>
                 <Stack direction="horizontal" style={{ marginBottom:"12px" }} >     
