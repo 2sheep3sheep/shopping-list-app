@@ -39,7 +39,7 @@ function Dashboard() {
             <div className="Dashboard-Body" style={{alignItems:"center", marginBottom:"12px", height:"40px"}}>
                 <ListFilteringTab filterOption={filterOption} setFilterOption={setFilterOption}/>
                 <ShoppingListsList filterOption={filterOption}/>
-                <div style={{width:"100%", justifyContent:"center", display:"flex", marginTop:"12px", marginBottom:"24px"}}>
+                <div style={{width:"100%", justifyContent:"center", display:"flex", marginTop:"12px", paddingBottom:"24px"}}>
                     <Button style={{boxShadow:"0 4px 12px 0px rgb(0 0 0 / 20%)"}} onClick={openCreateListModal}>+ Create Shopping List</Button>
                 </div>
             </div>
