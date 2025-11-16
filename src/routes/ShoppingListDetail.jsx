@@ -14,10 +14,13 @@ import EditShoppingListModal from '../components/modals/EditShoppingListModal.js
 import ButtonGroup from 'react-bootstrap/esm/ButtonGroup.js';
 import ToggleButton from 'react-bootstrap/esm/ToggleButton.js';
 import FilteringTab from '../components/FilteringTab.jsx';
+import { useNavigate } from 'react-router-dom';
 
 
 
 function ShoppingListDetail() {
+
+    const navTo = useNavigate();
 
     // Modal Controls ----------------
 
@@ -30,7 +33,7 @@ function ShoppingListDetail() {
     const closeEditItemModal = () => setEditItemState({...editItemState,open:false}) ;
 
     const [ editListState, setEditListState ] = useState({open:false, listData:{name:undefined}});
-    const openEditListModal = () => setEditListState({open:true, listData:{name:shoppingListData}}) ;
+    const openEditListModal = () => setEditListState({open:true, listData:{name:shoppingListData.name}}) ;
     const closeEditListModal = () => setEditListState({...editListState, open:false}) ;
 
     // -------------------------------
@@ -51,9 +54,11 @@ function ShoppingListDetail() {
 
     }
 
+
     return (
         <div>
-            <div className="Shopping-List-Header" style={{alignItems:"center", marginBottom:"12px", height:"40px"}}>
+            <div className="Shopping-List-Header" style={{alignItems:"center", marginBottom:"12px", height:"80px"}}>
+                <Button variant="secondary" style={{marginBottom:"6px"}} onClick={ (e) => {navTo("/")} } >🠈 Back to My Shopping Lists</Button>
                 <Stack direction='horizontal' gap={2} >
 
                     <div className='Shopping-List-Title Big-Label'>{shoppingListData.name}</div>

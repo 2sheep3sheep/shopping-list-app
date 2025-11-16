@@ -33,6 +33,28 @@ code {
 }
 
 
+.List-Card {
+  padding:12px;
+  transition: 0.2s;
+}
+.List-Card:hover {
+  box-shadow: 0 0 10px rgb(0,0,0,.2);
+  cursor: pointer;
+}
+
+.User-Icon {
+  width:32px;
+  height:32px;
+  padding: 4px;
+  text-align: center;
+  text-overflow:clip;
+  overflow:hidden;
+  color: white;
+  background-color: #7863eb;
+  box-shadow: 0 2px 4px rgb(0,0,0,0.2);
+  border-radius: 100%;
+}
+
 @media (max-width: 560px) {
     .verbose-label {
       display:none
