@@ -12,7 +12,7 @@ function EditItemModal(props) {
 
     const [ validationState, setValidationState ] = useState({name:false, quantity:false});
 
-    const is_editing = (props.editItemState.itemID == "")
+    const is_editing = !(props.editItemState.itemData._id === null)
 
     function changeItem() {
         var valid = true
@@ -24,7 +24,8 @@ function EditItemModal(props) {
         if (Number.isInteger(Number(props.editItemState.itemData.quantity)) === false) {valid = false; setValidationState({...validationState, quantity:"Please choose a whole number."})}
 
         if (valid) {
-            shoppingListHandlerMap.editItem( props.editItemState.itemID !="" ? props.editItemState.itemID :shoppingListHandlerMap.newItemID() , props.editItemState.itemData)
+            if (is_editing) shoppingListHandlerMap.editItem(props.editItemState.itemData)
+            if (!is_editing) shoppingListHandlerMap.addItem(props.editItemState.itemData)
             props.closeFunction()
         }
     }
@@ -48,7 +49,7 @@ function EditItemModal(props) {
         <Modal show={props.editItemState["open"]} onHide={props.closeFunction}>
             <Modal.Dialog style={{width:"100%"}}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{is_editing ? "Add Item":"Edit Item"}</Modal.Title>
+                    <Modal.Title>{!is_editing ? "Add Item":"Edit Item"}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{width:"100%"}}>
                     <Form>
@@ -69,7 +70,7 @@ function EditItemModal(props) {
                     Close
                 </Button>
                 <Button variant="primary" onClick={changeItem}>
-                    {is_editing ? "Add Item":"Save Changes"}
+                    {!is_editing ? "Add Item":"Save Changes"}
                 </Button>
                 </Modal.Footer>
             </Modal.Dialog>

@@ -1,4 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import FetchHelper from "../fetchHelper";
+import { MockContext } from "./MockDataProvider";
 
 
 
@@ -30,20 +32,70 @@ function generate_random_list() {
 }
 
 function ShoppingListsProvider({children}) {
+
+    const mock = (process.env.REACT_APP_MOCK_DATA === "1")
+    const { mockData, setMockData, mockDataHandlerMap } = useContext(MockContext)
+
     let default_lists_data = {
         shoppingLists : []
     };
 
-    for (var i=0; i<10; i++) {
-        default_lists_data.shoppingLists.push( generate_random_list() )
+    /*
+    if (mock) {
+        for (var i=0; i<10; i++) {
+            default_lists_data.shoppingLists.push( generate_random_list() )
+        }
+
+    }*/
+
+    const [shoppingListsData, setShoppingListsData] = useState( { state:"pending", data:default_lists_data } )
+    
+    async function getLists() {
+        if (mock) {
+            setShoppingListsData(
+                {
+                    ...shoppingListsData,
+                    state:"ready",
+                    data: {shoppingLists:mockData.shoppingLists}
+                }
+            )
+            return;
+        }
+
+        const result = await FetchHelper.shoppingList.list();
+
+        if ( result.status === "error") {
+            setShoppingListsData(
+                {
+                    ...shoppingListsData,
+                    state:"pending",
+                    data:null
+                }
+            )
+            return;
+        }
+        setShoppingListsData(
+            {
+                ...shoppingListsData,
+                state:"ready",
+                data:result.data
+            }
+        )
     }
 
-    console.log(default_lists_data)
 
-    const [shoppingListsData, setShoppingListsData] = useState( default_lists_data )
+    useEffect( () => {getLists()}, [] )
 
 
-    function createList(_list_data,_authID) {
+    async function createList(_list_data,_authID) {
+
+        if (mock) {
+            console.log(_authID)
+            mockDataHandlerMap.createList(_list_data,_authID);
+            return;
+        }
+
+        /*
         var new_list = {
             ..._list_data,
             items:{},
@@ -61,13 +113,29 @@ function ShoppingListsProvider({children}) {
                 ...shoppingListsData,
                 shoppingLists: new_lists_list
             }
-        )
+        )*/
+        const result = await FetchHelper.shoppingList.create( { name:_list_data.name } )
+
+        if ( result.ok ) {
+            var new_lists_list = shoppingListsData.data.shoppingLists;
+            console.log(result.data)
+            new_lists_list.push(result.data)
+
+            setShoppingListsData(
+                {
+                    ...shoppingListsData,
+                    data: {
+                        shoppingLists: new_lists_list
+                    }
+                }
+            )
+        }
     }
 
     const value = {
         shoppingListsData,
         setShoppingListsData,
-        shoppingListsHandlerMap: { createList }
+        shoppingListsHandlerMap: { createList, getLists }
     }
 
     return (

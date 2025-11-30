@@ -8,11 +8,25 @@ import Dropdown from 'react-bootstrap/Dropdown';
 function AppHeader(props) {
 
     const { userData, setUserData, userDataHandlerMap } = useContext(UserContext);
+    
 
     const user_list = []
-    const user_ids = Object.keys(userData.users);
-    for (var i=0; i<user_ids.length; i++) {
-        user_list.push( <Dropdown.Item eventKey={user_ids[i]} >{userData.users[user_ids[i]].name}</Dropdown.Item> )
+
+
+    let logged_in_name = "..."
+
+    if (userData.state === "ready") {
+        const users = userData.data.users
+        for (var i=0; i<users.length; i++) {
+            user_list.push( <Dropdown.Item eventKey={users[i]._id} >{users[i].name}</Dropdown.Item> )
+        }
+    
+        const index = userData.data.users.findIndex( (e) => e._id === userData.data.authenticatedID )
+        if ( index != -1 ) {
+            logged_in_name = userData.data.users[index].name
+        }else{
+            logged_in_name = "no one"
+        }
     }
 
     return (
@@ -20,11 +34,11 @@ function AppHeader(props) {
             <Stack direction="horizontal">
                 <div>{"Shopping List App"}</div>
                 <Dropdown className="ms-auto" onSelect={ (e) => userDataHandlerMap.changeAuthenticatedUser(e) }>
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic" style={{boxShadow:"0 0px 12px 0px rgb(0 0 0 / 20%)"}}>
-                        Logged in as: <b>{ userData.users[userData.authenticatedID].name }</b>
+                    <Dropdown.Toggle variant="primary" id="dropdown-basic" style={{ boxShadow:"0 0px 12px 0px rgb(0 0 0 / 20%)"}}>
+                        Logged in as: { userData.state === "ready" ? <b>{ logged_in_name }</b> : "..."}
                     </Dropdown.Toggle>
 
-                    <Dropdown.Menu>
+                    <Dropdown.Menu  >
                         {user_list}
                     </Dropdown.Menu>
                 </Dropdown>

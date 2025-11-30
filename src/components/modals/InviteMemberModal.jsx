@@ -16,14 +16,22 @@ function InviteMemberModal(props) {
     const [selectedMembers, setSelectedMembers] = useState([]);
     const handleSelection = (val) => setSelectedMembers(val);
 
-    const memberToggles = Object.keys(userData.users).map( u => shoppingListData.members.findIndex( (m) => m===u )==-1 ? (
-        <ToggleButton 
-        id={`tbg-btn-${u}`} 
-        variant="outline-primary" 
-        value={u} 
-        style={{textAlign:"left"}} 
-        >{userData.users[u].name}</ToggleButton>) : <></>
-    );
+    let memberToggles = []
+
+    for (var i=0; i<userData.data.users.length; i++) {
+        var user = userData.data.users[i]
+        if ( shoppingListData.data.members.findIndex( (e)=> e===user._id ) === -1 ) {
+            memberToggles.push(
+                <ToggleButton 
+                id={`tbg-btn-${user._id}`} 
+                variant="outline-primary" 
+                value={user._id} 
+                style={{textAlign:"left"}} 
+                >{user.name}</ToggleButton>
+            )
+        }
+    }
+
 
     function inviteSelectedMembers() {
         shoppingListHandlerMap.inviteMembers(selectedMembers);

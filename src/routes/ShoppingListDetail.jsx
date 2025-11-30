@@ -28,27 +28,31 @@ function ShoppingListDetail() {
     const openInviteMemberModal = () => setInviteMemberState(true) ;
     const closeInviteMemberModal = () => setInviteMemberState(false) ;
 
-    const [ editItemState, setEditItemState ] = useState({open:false, itemID:"", itemData:{name:undefined,quantity:0}});
-    const openEditItemModal = () => setEditItemState({open:true, itemID:"", itemData:{name:undefined,quantity:1}}) ;
+    const [ editItemState, setEditItemState ] = useState({open:false, itemData:{_id:null,name:undefined,quantity:0}});
+    const openEditItemModal = () => setEditItemState({open:true, itemData:{_id:null,name:undefined,quantity:1}}) ;
     const closeEditItemModal = () => setEditItemState({...editItemState,open:false}) ;
 
     const [ editListState, setEditListState ] = useState({open:false, listData:{name:undefined}});
-    const openEditListModal = () => setEditListState({open:true, listData:{name:shoppingListData.name}}) ;
+    const openEditListModal = () => setEditListState({open:true, listData:{name:shoppingListData.data.name}}) ;
     const closeEditListModal = () => setEditListState({...editListState, open:false}) ;
 
     // -------------------------------
 
     const [ filterOption, setFilterOption ] = useState("2");
 
-    const { shoppingListData } = useContext(ShoppingListDataContext);
+    const { shoppingListData, setShoppingListData, shoppingListHandlerMap } = useContext(ShoppingListDataContext);
     const { userData } = useContext(UserContext);
 
-    const is_owner = (shoppingListData.owner === userData.authenticatedID);
+    const is_owner = (shoppingListData.data.owner === userData.data.authenticatedID);
 
-    if ( shoppingListData.members.findIndex( (e) => e===userData.authenticatedID ) === -1 ) {
+    var index = shoppingListData.data.members.findIndex( (e) => e === userData.data.authenticatedID )
+    if ( index === -1 ) {
         return (
-            <div className="Full-Page-Notice">
-               {"You are not a member of this shopping list :("}
+            <div>
+                <Button variant="secondary" style={{marginBottom:"6px"}} onClick={ (e) => {navTo("/")} } >🠈 Back to My Shopping Lists</Button>
+                <div className="Full-Page-Notice">
+                {"You are not a member of this shopping list :("}
+                </div>
             </div>
         )
 
@@ -61,13 +65,13 @@ function ShoppingListDetail() {
                 <Button variant="secondary" style={{marginBottom:"6px"}} onClick={ (e) => {navTo("/")} } >🠈 Back to My Shopping Lists</Button>
                 <Stack direction='horizontal' gap={2} >
 
-                    <div className='Shopping-List-Title Big-Label'>{shoppingListData.name}</div>
+                    <div className='Shopping-List-Title Big-Label'>{shoppingListData.data.name}</div>
                 
                     { is_owner ? 
                         <Stack direction='horizontal' gap={2} className="ms-auto">
                             <div > <Button variant='outline-secondary' onClick={openEditListModal}>Edit</Button> </div>
-                            <div> <Button variant='outline-secondary'>Archive</Button> </div>
-                            <div> <Button variant='outline-danger'>Delete</Button> </div>
+                            <div> <Button variant='outline-secondary' onClick={ (e) => {shoppingListHandlerMap.archiveList()} } >Archive</Button> </div>
+                            <div> <Button variant='outline-danger' onClick={ (e) => {shoppingListHandlerMap.deleteList()} } >Delete</Button> </div>
                         </Stack>
                     : 
                         <div></div>
@@ -79,7 +83,7 @@ function ShoppingListDetail() {
             <div className='Shopping-List-Body'>
                 <FilteringTab filterOption={filterOption} setFilterOption={setFilterOption}/>
 
-                <ListItemList itemList={shoppingListData.items} setEditItemState={setEditItemState} filterOption={filterOption}/>
+                <ListItemList itemList={shoppingListData.data.items} setEditItemState={setEditItemState} filterOption={filterOption}/>
                 
                 <div style={{width:"100%", justifyContent:"center", display:"flex"}}>
                     <Button style={{boxShadow:"0 4px 12px 0px rgb(0 0 0 / 20%)"}} onClick={openEditItemModal}>+ Add Item</Button>
@@ -87,7 +91,7 @@ function ShoppingListDetail() {
                 
                 <div className='Big-Label' style={{marginTop:"24px", marginBottom:"12px"}}>Member List</div>
             
-                <MemberList memberList={shoppingListData.members}/>
+                <MemberList memberList={shoppingListData.data.members}/>
                 { is_owner ?
                 <div style={{width:"100%", justifyContent:"center", display:"flex", }}>
                     <Button style={{boxShadow:"0 4px 12px 0px rgb(0 0 0 / 20%)"}} onClick={openInviteMemberModal} >+ Invite Members</Button>
@@ -99,6 +103,7 @@ function ShoppingListDetail() {
                 }
 
             </div>
+            
             <div className="Shopping-List-Modals">
                 <InviteMemberModal visible={inviteMemberState} closeFunction={closeInviteMemberModal} />
                 <EditItemModal editItemState={editItemState} setEditItemState={setEditItemState} closeFunction={closeEditItemModal} />

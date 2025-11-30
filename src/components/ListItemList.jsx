@@ -6,11 +6,11 @@ function ListItemList(props) {
 
     let list_items = []
     
-    const item_ids = Object.keys( props.itemList );
+    const items = props.itemList;
 
-    for (var i=0; i<item_ids.length; i++) {
-        var key = item_ids[i]
-        list_items.push( <ListItem itemID={key} itemData={props.itemList[key]} setEditItemState={props.setEditItemState} filterOption={props.filterOption}/> )
+    for (var i=0; i<items.length; i++) {
+        var item = items[i]
+        list_items.push( <ListItem itemData={item} setEditItemState={props.setEditItemState} filterOption={props.filterOption}/> )
     }
 
     return (

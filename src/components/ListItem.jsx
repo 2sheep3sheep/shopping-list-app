@@ -19,27 +19,26 @@ function ListItem(props) {
     }
 
     function completeSelf() {
-        shoppingListHandlerMap.completeItem(props.itemID);
-        setShoppingListData({...shoppingListData});
+        shoppingListHandlerMap.completeItem(data._id);
     }
 
     function deleteSelf() {
-        shoppingListHandlerMap.deleteItem(props.itemID);
-        setShoppingListData({...shoppingListData});
+        shoppingListHandlerMap.deleteItem(data._id);
     }
 
     function editSelf() {
         props.setEditItemState(
-            {open:true, itemID:props.itemID, itemData:props.itemData}
+            {open:true, itemData:data}
         )
     }
 
+    /*
     if (!shoppingListData.items[props.itemID]) {
         return (
             <div>
             </div>
         )
-    }
+    }*/
 
     if (props.filterOption === "2" && data.complete) return (<div/>)
     if (props.filterOption === "3" && !data.complete) return (<div/>)

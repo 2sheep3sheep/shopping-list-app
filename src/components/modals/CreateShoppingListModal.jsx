@@ -26,7 +26,7 @@ function CreateShoppingListModal(props) {
         if ((props.createListState.listData.name ?? "") === "") {valid = false; setValidationState({...validationState, name:true})}
 
         if (valid) {
-            shoppingListsHandlerMap.createList( props.createListState.listData, userData.authenticatedID )
+            shoppingListsHandlerMap.createList( props.createListState.listData, userData.data.authenticatedID )
             props.closeFunction()
         }
     }
